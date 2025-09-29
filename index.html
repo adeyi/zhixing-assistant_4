@@ -1,0 +1,484 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知行小导向 - 校园智能助手</title>
+    <style>
+        /* 清新配色方案 */
+        :root {
+            --primary: #6BC3FF;  /* 清新天空蓝 */
+            --secondary: #8BD78B; /* 清新草绿色 */
+            --accent: #FFB74D;   /* 温暖橙色 */
+            --light: #F8FDFF;    /* 浅蓝背景 */
+            --text: #4A6572;     /* 柔和的深蓝灰 */
+            --highlight: #E8F5FF; /* 高亮背景 */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5fdff 0%, #f0f9ff 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, #8FD6FF 100%);
+            color: white;
+            padding: 70px 20px 50px;
+            text-align: center;
+            border-radius: 0 0 40px 40px;
+            box-shadow: 0 6px 20px rgba(107, 195, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.1"><circle cx="50" cy="50" r="40" fill="white"/></svg>');
+            background-size: 100px 100px;
+        }
+        
+        .mascot {
+            width: 130px;
+            height: 130px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            color: var(--primary);
+            position: relative;
+            z-index: 1;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .knowledge-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            margin-top: 15px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin: 50px 0 25px;
+            color: var(--primary);
+            font-size: 28px;
+            position: relative;
+            font-weight: 600;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            margin: 15px auto;
+            border-radius: 4px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--secondary);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+        }
+        
+        .feature-card h3 span {
+            margin-right: 12px;
+            font-size: 28px;
+        }
+        
+        .knowledge-source {
+            font-size: 14px;
+            color: #7F8C8D;
+            margin-top: 15px;
+            padding-left: 15px;
+            border-left: 3px solid var(--accent);
+            background: var(--highlight);
+            padding: 8px 15px;
+            border-radius: 8px;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary) 0%, #8FD6FF 100%);
+            color: white;
+            padding: 18px 45px;
+            text-decoration: none;
+            border-radius: 35px;
+            display: inline-block;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 25px 0;
+            transition: all 0.3s;
+            box-shadow: 0 6px 15px rgba(107, 195, 255, 0.3);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(107, 195, 255, 0.4);
+        }
+        
+        .cta-button:hover::after {
+            left: 100%;
+        }
+        
+        .tips-box {
+            background: linear-gradient(135deg, #E8F5FF 0%, #F0FFF0 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 35px 0;
+            border-left: 5px solid var(--accent);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+        
+        .qa-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .category-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            border-top: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+        
+        .category-card h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+        }
+        
+        .category-card h4 span {
+            margin-right: 10px;
+            font-size: 22px;
+        }
+        
+        .question-list {
+            list-style-type: none;
+        }
+        
+        .question-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #E0F0FF;
+            position: relative;
+            padding-left: 25px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .question-list li:before {
+            content: '•';
+            color: var(--accent);
+            position: absolute;
+            left: 0;
+            font-size: 20px;
+        }
+        
+        .question-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .question-list li:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            background: linear-gradient(135deg, #E8F5FF 0%, #F0F9FF 100%);
+            border-radius: 40px 40px 0 0;
+            color: #7F8C8D;
+            font-size: 15px;
+        }
+        
+        .link-info {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .link-info a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+            word-break: break-all;
+        }
+        
+        .link-info a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header {
+                padding: 50px 15px 35px;
+                border-radius: 0 0 30px 30px;
+            }
+            
+            .mascot {
+                width: 110px;
+                height: 110px;
+                font-size: 50px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .feature-card {
+                padding: 20px;
+            }
+            
+            .qa-categories {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="mascot">🤖</div>
+        <h1>知行小导向</h1>
+        <p>您的校园智能助手</p>
+        <div class="knowledge-badge">知识来源：学校官方文档与规章制度</div>
+    </div>
+    
+    <div class="container">
+        <h2 class="section-title">🌟 核心功能特色</h2>
+        
+        <div class="feature-card">
+            <h3><span>📚</span> 学籍管理指导</h3>
+            <p>基于学校官方学籍管理规定，为您解答入学注册、转专业、休学复学、学分计算、毕业要求等学籍相关问题。</p>
+            <div class="knowledge-source">依据：学校学籍管理相关规定</div>
+        </div>
+        
+        <div class="feature-card">
+            <h3><span>🏫</span> 日常管理咨询</h3>
+            <p>提供学生考勤、综合素质测评、违纪处分规定、申诉流程等日常管理制度的专业解答。</p>
+            <div class="knowledge-source">依据：学生日常管理系列规定</div>
+        </div>
+        
+        <div class="feature-card">
+            <h3><span>💼</span> 奖励资助指南</h3>
+            <p>详细解读各类奖学金、助学金、勤工助学、国家助学贷款等奖励资助政策的申请条件与流程。</p>
+            <div class="knowledge-source">依据：学生奖励与资助管理相关规定</div>
+        </div>
+        
+        <div class="feature-card">
+            <h3><span>🏠</span> 公寓生活服务</h3>
+            <p>解答学生公寓管理规定、文明寝室评比、住宿调整、安全注意事项等公寓生活相关问题。</p>
+            <div class="knowledge-source">依据：学生公寓管理相关规定</div>
+        </div>
+        
+        <div style="text-align: center; margin: 40px 0;">
+            <a href="https://edu-maxkb2.fit2cloud.cn/chat/d7cfb77b2e8aca81" class="cta-button" target="_blank">立即咨询知行小导</a>
+        </div>
+        
+        <div class="link-info">
+            <p>知行小导向已成功集成到公众号中，点击上方按钮或访问以下链接即可使用：</p>
+            <p><a href="https://edu-maxkb2.fit2cloud.cn/chat/d7cfb77b2e8aca81" target="_blank">https://edu-maxkb2.fit2cloud.cn/chat/d7cfb77b2e8aca81</a></p>
+        </div>
+        
+        <div class="tips-box">
+            <h3>💡 最佳提问方式</h3>
+            <p>为了获得更准确的回答，建议：</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>具体明确</strong>：如"转专业需要满足什么条件？"而非"转专业相关"</li>
+                <li><strong>使用关键词</strong>：如"奖学金"、"违纪处分"、"公寓管理"等核心词汇</li>
+                <li><strong>参考文档章节</strong>：如"学籍管理第3条关于休学的规定"</li>
+            </ul>
+        </div>
+        
+        <h2 class="section-title">💬 常见问题分类</h2>
+        <div class="qa-categories">
+            <div class="category-card">
+                <h4><span>📖</span> 学籍与学业</h4>
+                <ul class="question-list">
+                    <li>如何办理转专业？</li>
+                    <li>学分如何计算？</li>
+                    <li>休学复学流程是什么？</li>
+                    <li>毕业要求有哪些？</li>
+                </ul>
+            </div>
+            
+            <div class="category-card">
+                <h4><span>🎓</span> 奖励与资助</h4>
+                <ul class="question-list">
+                    <li>奖学金有哪些种类？</li>
+                    <li>如何申请国家助学金？</li>
+                    <li>勤工助学岗位如何申请？</li>
+                    <li>国家助学贷款条件？</li>
+                </ul>
+            </div>
+            
+            <div class="category-card">
+                <h4><span>🏠</span> 公寓与生活</h4>
+                <ul class="question-list">
+                    <li>寝室卫生检查标准？</li>
+                    <li>文明寝室如何评比？</li>
+                    <li>公寓安全注意事项？</li>
+                    <li>校外住宿如何申请？</li>
+                </ul>
+            </div>
+            
+            <div class="category-card">
+                <h4><span>⚖️</span> 纪律与权益</h4>
+                <ul class="question-list">
+                    <li>违纪处分有哪些类型？</li>
+                    <li>如何提出处分申诉？</li>
+                    <li>学生权益保障措施？</li>
+                    <li>综合素质测评方法？</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 40px 0;">
+            <a href="https://edu-maxkb2.fit2cloud.cn/chat/d7cfb77b2e8aca81" class="cta-button" target="_blank">查看更多问题分类</a>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>知行小导向 - 校园智能助手</p>
+        <p>本助手基于学校官方文档与规章制度构建</p>
+        <p>信息仅供参考，具体以学校官方最新通知为准</p>
+    </div>
+
+    <script>
+        // 交互效果
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // 链接已直接设置在href中，这里不需要额外处理
+                console.log('跳转到知行小导向对话界面');
+            });
+        });
+        
+        // 卡片悬停效果
+        const cards = document.querySelectorAll('.feature-card, .category-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // 问题点击效果
+        document.querySelectorAll('.question-list li').forEach(question => {
+            question.addEventListener('click', function() {
+                const questionText = this.textContent;
+                // 在实际应用中，这里可以跳转到小助手并自动输入问题
+                alert(`您点击了问题："${questionText}"\n\n在实际部署中，这里将直接跳转并自动输入该问题`);
+            });
+        });
+    </script>
+</body>
+</html>
